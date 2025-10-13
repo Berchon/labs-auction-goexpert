@@ -1,0 +1,2 @@
+### GET user
+GET http://localhost:8080/user/e73fce6a-ccf5-4c12-87f7-30c5f9c9a6f7
