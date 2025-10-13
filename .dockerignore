@@ -1,0 +1,13 @@
+.vscode
+.git
+.gitignore
+Dockerfile
+docker-compose.yml
+Makefile
+README.md
+**/tmp
+**/vendor
+**/bin
+**/dist
+*.log
+*.env
