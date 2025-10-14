@@ -5,6 +5,7 @@ import (
 	"fullcycle-auction_go/configuration/logger"
 	"log"
 	"os"
+	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -41,6 +42,10 @@ func NewMongoDBConnection(ctx context.Context) (*mongo.Database, error) {
 		if err != nil {
 			return nil, err
 		}
+		err = ensureAuctionsCollection(ctx, db)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	return db, nil
@@ -68,6 +73,38 @@ func ensureUsersCollection(ctx context.Context, client *mongo.Database) error {
 			return err
 		}
 		log.Println("User inserted successfully into users collection")
+	}
+
+	return nil
+}
+
+func ensureAuctionsCollection(ctx context.Context, client *mongo.Database) error {
+	collection := client.Collection("auctions")
+
+	var count int64
+	count, err := collection.CountDocuments(ctx, bson.D{})
+	if err != nil {
+		log.Println("Error counting documents in auctions collection:", err)
+		return err
+	}
+
+	if count == 0 {
+		user := bson.M{
+			"_id":          "44c402b6-2960-4f9f-999f-5f217f40cee8",
+			"product_name": "Mandolate",
+			"category":     "Doce",
+			"description":  "A melhor sobremesa do RU",
+			"condition":    1,
+			"status":       0,
+			"timestamp":    time.Now().Unix(),
+		}
+
+		_, err := collection.InsertOne(ctx, user)
+		if err != nil {
+			log.Println("Error inserting auction into auctions collection:", err)
+			return err
+		}
+		log.Println("Auction inserted successfully into auctions collection")
 	}
 
 	return nil
