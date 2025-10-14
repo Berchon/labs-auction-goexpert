@@ -1,0 +1,15 @@
+### POST create a bid
+POST http://localhost:8080/bid
+Content-Type: application/json
+
+{
+  "auction_id": "44c402b6-2960-4f9f-999f-5f217f40cee8",
+  "user_id": "e73fce6a-ccf5-4c12-87f7-30c5f9c9a6f7",
+  "amount": 15.0
+}
+
+### GET retrieve the winning bid for a specific auction
+GET http://localhost:8080/auction/winner/44c402b6-2960-4f9f-999f-5f217f40cee8
+
+### GET retrieve bids for a specific auction
+GET http://localhost:8080/bid/44c402b6-2960-4f9f-999f-5f217f40cee8
