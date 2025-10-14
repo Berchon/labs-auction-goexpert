@@ -1,0 +1,39 @@
+### POST create an auction 1
+POST http://localhost:8080/auction
+Content-Type: application/json
+
+{
+  "product_name": "Paçoquinha",
+  "category": "Doce",
+  "description": "Duas mordidas do melhor sabor",
+  "condition": 1
+}
+
+### POST create an auction 2
+POST http://localhost:8080/auction
+Content-Type: application/json
+
+{
+  "product_name": "Mola maluca",
+  "category": "Brinquedo",
+  "description": "Você vai adorar",
+  "condition": 1
+}
+
+### GET retrieve auction by id
+GET http://localhost:8080/auction/44c402b6-2960-4f9f-999f-5f217f40cee8
+
+### GET retrieve all auctions
+GET http://localhost:8080/auction
+
+### GET retrieve all auctions with status `Active`
+GET http://localhost:8080/auction?status=0
+
+### GET retrieve all auctions with status `Completed`
+GET http://localhost:8080/auction?status=1
+
+### GET retrieve all auctions with status `Active` and category `Doce`
+GET http://localhost:8080/auction?status=0&category=Doce
+
+### GET retrieve all auctions with status `Active` and category `Doce` and product name `Mandolate`
+GET http://localhost:8080/auction?status=0&category=Doce&productName=Mandolate
