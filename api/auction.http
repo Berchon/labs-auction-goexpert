@@ -6,7 +6,7 @@ Content-Type: application/json
   "product_name": "Paçoquinha",
   "category": "Doce",
   "description": "Duas mordidas do melhor sabor",
-  "condition": 1
+  "condition": 2
 }
 
 ### POST create an auction 2

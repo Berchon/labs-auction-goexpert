@@ -3,6 +3,7 @@ package mongodb
 import (
 	"context"
 	"fullcycle-auction_go/configuration/logger"
+	"fullcycle-auction_go/internal/entity/auction_entity"
 	"log"
 	"os"
 	"time"
@@ -89,8 +90,9 @@ func ensureAuctionsCollection(ctx context.Context, client *mongo.Database) error
 	}
 
 	if count == 0 {
+		id := "44c402b6-2960-4f9f-999f-5f217f40cee8"
 		user := bson.M{
-			"_id":          "44c402b6-2960-4f9f-999f-5f217f40cee8",
+			"_id":          id,
 			"product_name": "Mandolate",
 			"category":     "Doce",
 			"description":  "A melhor sobremesa do RU",
@@ -105,7 +107,38 @@ func ensureAuctionsCollection(ctx context.Context, client *mongo.Database) error
 			return err
 		}
 		log.Println("Auction inserted successfully into auctions collection")
+
+		go func() {
+			select {
+			case <-time.After(getAuctioInterval()):
+				closeAuction(ctx, collection, id)
+			case <-ctx.Done():
+				logger.Error("Error to close auction, context cancelled", ctx.Err())
+				return
+			}
+		}()
 	}
 
 	return nil
+}
+
+func closeAuction(ctx context.Context, collection *mongo.Collection, auctionId string) {
+	update := bson.M{"$set": bson.M{"status": auction_entity.Completed}}
+	filter := bson.M{"_id": auctionId}
+
+	_, err := collection.UpdateOne(ctx, filter, update)
+	if err != nil {
+		logger.Error("Error trying to update auction status to completed", err)
+		return
+	}
+}
+
+func getAuctioInterval() time.Duration {
+	auctionInterval := os.Getenv("AUCTION_INTERVAL")
+	duration, err := time.ParseDuration(auctionInterval)
+	if err != nil {
+		return time.Minute * 2
+	}
+
+	return duration
 }
