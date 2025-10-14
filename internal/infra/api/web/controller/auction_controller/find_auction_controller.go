@@ -4,10 +4,12 @@ import (
 	"context"
 	"fullcycle-auction_go/configuration/rest_err"
 	"fullcycle-auction_go/internal/usecase/auction_usecase"
-	"github.com/gin-gonic/gin"
-	"github.com/google/uuid"
+
 	"net/http"
 	"strconv"
+
+	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 )
 
 func (u *AuctionController) FindAuctionById(c *gin.Context) {
@@ -37,6 +39,10 @@ func (u *AuctionController) FindAuctions(c *gin.Context) {
 	status := c.Query("status")
 	category := c.Query("category")
 	productName := c.Query("productName")
+
+	if status == "" {
+		status = "-1"
+	}
 
 	statusNumber, errConv := strconv.Atoi(status)
 	if errConv != nil {
