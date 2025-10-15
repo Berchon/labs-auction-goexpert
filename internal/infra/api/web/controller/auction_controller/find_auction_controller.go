@@ -2,8 +2,9 @@ package auction_controller
 
 import (
 	"context"
-	"fullcycle-auction_go/configuration/rest_err"
-	"fullcycle-auction_go/internal/usecase/auction_usecase"
+
+	"github.com/Berchon/fullcycle-auction_go/configuration/rest_err"
+	"github.com/Berchon/fullcycle-auction_go/internal/usecase/auction_usecase"
 
 	"net/http"
 	"strconv"

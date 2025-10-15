@@ -2,11 +2,12 @@ package auction_usecase
 
 import (
 	"context"
-	"fullcycle-auction_go/internal/entity/auction_entity"
-	"fullcycle-auction_go/internal/entity/bid_entity"
-	"fullcycle-auction_go/internal/internal_error"
-	"fullcycle-auction_go/internal/usecase/bid_usecase"
 	"time"
+
+	"github.com/Berchon/fullcycle-auction_go/internal/entity/auction_entity"
+	"github.com/Berchon/fullcycle-auction_go/internal/entity/bid_entity"
+	"github.com/Berchon/fullcycle-auction_go/internal/internal_error"
+	"github.com/Berchon/fullcycle-auction_go/internal/usecase/bid_usecase"
 )
 
 type AuctionInputDTO struct {

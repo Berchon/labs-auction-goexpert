@@ -2,11 +2,12 @@ package auction
 
 import (
 	"context"
-	"fullcycle-auction_go/internal/entity/auction_entity"
-	"fullcycle-auction_go/internal/internal_error"
 	"os"
 	"testing"
 	"time"
+
+	"github.com/Berchon/fullcycle-auction_go/internal/entity/auction_entity"
+	"github.com/Berchon/fullcycle-auction_go/internal/internal_error"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"

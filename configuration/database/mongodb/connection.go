@@ -2,11 +2,12 @@ package mongodb
 
 import (
 	"context"
-	"fullcycle-auction_go/configuration/logger"
-	"fullcycle-auction_go/internal/entity/auction_entity"
 	"log"
 	"os"
 	"time"
+
+	"github.com/Berchon/fullcycle-auction_go/configuration/logger"
+	"github.com/Berchon/fullcycle-auction_go/internal/entity/auction_entity"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"

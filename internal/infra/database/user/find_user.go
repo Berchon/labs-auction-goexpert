@@ -4,9 +4,10 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"fullcycle-auction_go/configuration/logger"
-	"fullcycle-auction_go/internal/entity/user_entity"
-	"fullcycle-auction_go/internal/internal_error"
+
+	"github.com/Berchon/fullcycle-auction_go/configuration/logger"
+	"github.com/Berchon/fullcycle-auction_go/internal/entity/user_entity"
+	"github.com/Berchon/fullcycle-auction_go/internal/internal_error"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 )
