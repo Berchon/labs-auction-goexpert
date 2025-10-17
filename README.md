@@ -70,18 +70,19 @@ Antes de rodar o projeto, copie o `.env.exemplo` para gerar o arquivo `.env`:
 cp cmd/auction/.env.example cmd/auction/.env
 ```
 
-| Variável | Descrição | Valor padrão / Exemplo |
-|-----------|------------|------------------------|
-| `BATCH_INSERT_INTERVAL` | Intervalo de inserção em lote para registros. | `5s` |
-| `MAX_BATCH_SIZE` | Número máximo de itens em um batch. | `4` |
-| `AUCTION_INTERVAL` | Tempo de duração de um leilão antes do fechamento automático. | `120s` |
-| `APP_MODE` | Define o modo da aplicação: `dev`, `test`, `prod`. | `dev` |
-| `MONGO_INITDB_ROOT_USERNAME` | Usuário administrador do MongoDB. | `admin` |
-| `MONGO_INITDB_ROOT_PASSWORD` | Senha do administrador do MongoDB. | `admin` |
-| `MONGODB_URL` | URL de conexão principal do MongoDB. | `mongodb://admin:admin@mongodb:27017/auctions_db?authSource=admin` |
-| `MONGODB_DB` | Nome do banco principal. | `auctions_db` |
-| `MONGODB_URL_TEST` | URL de conexão para o banco de testes. | `mongodb://admin:admin@localhost:27017/auctions_db_test?authSource=admin` |
-| `MONGODB_DB_TEST` | Nome do banco de testes. | `auctions_db_test` |
+| Variável | Exemplo | Descrição |
+|----------|----|----------------|
+| `BATCH_INSERT_INTERVAL` | `5s` | Intervalo de inserção em lote para registros. |
+| `MAX_BATCH_SIZE` | `4` | Número máximo de itens em um batch. |
+| `AUCTION_INTERVAL` | `120s` | Tempo de duração de um leilão antes do fechamento automático. |
+| `APP_MODE` | `dev` | Define o modo da aplicação: `dev`, `test`, `prod`. |
+| `MONGO_INITDB_ROOT_USERNAME` | `admin` | Usuário administrador do MongoDB. |
+| `MONGO_INITDB_ROOT_PASSWORD` | `admin` | Senha do administrador do MongoDB. |
+| `MONGODB_URL` | `mongodb://admin:admin@mongodb:27017/auctions_db?authSource=admin` | URL de conexão principal do MongoDB. |
+| `MONGODB_DB` | `auctions_db` | Nome do banco principal. |
+| `MONGODB_URL_TEST` | `mongodb://admin:admin@localhost:27017/auctions_db_test?authSource=admin` | URL de conexão para o banco de testes. |
+| `MONGODB_DB_TEST` | `auctions_db_test` | Nome do banco de testes. |
+
 
 ---
 
