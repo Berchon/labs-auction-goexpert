@@ -1,3 +1,5 @@
 .vscode
 *.env
-coverage.out
+coverage.*
+coverage_integration.*
+coverage_unit.*
