@@ -2,7 +2,7 @@ BATCH_INSERT_INTERVAL=20s
 MAX_BATCH_SIZE=4
 AUCTION_INTERVAL=60s
 
-APP_MODE=dev #prod, dev, test. Dev=add init data in DB. test=used in integration tests
+APP_MODE=prod #prod, dev, test. Dev=add init data in DB. test=used in integration tests
 
 MONGO_INITDB_ROOT_USERNAME: admin
 MONGO_INITDB_ROOT_PASSWORD: admin

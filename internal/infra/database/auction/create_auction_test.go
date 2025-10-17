@@ -64,8 +64,9 @@ func TestCreateAuction(t *testing.T) {
 		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Millisecond)
 		defer cancel()
 
+		originalAuctionInterval := os.Getenv("AUCTION_INTERVAL")
 		os.Setenv("AUCTION_INTERVAL", "20ms")
-		defer os.Unsetenv("AUCTION_INTERVAL")
+		defer os.Setenv("AUCTION_INTERVAL", originalAuctionInterval)
 
 		auction := &auction_entity.Auction{
 			Id:          "2",
@@ -89,8 +90,9 @@ func TestCreateAuction(t *testing.T) {
 
 		repo := &AuctionRepository{Collection: mt.Coll}
 
+		originalAuctionInterval := os.Getenv("AUCTION_INTERVAL")
 		os.Setenv("AUCTION_INTERVAL", "10ms")
-		defer os.Unsetenv("AUCTION_INTERVAL")
+		defer os.Setenv("AUCTION_INTERVAL", originalAuctionInterval)
 
 		ctx := context.Background()
 		auction := &auction_entity.Auction{
@@ -115,8 +117,9 @@ func TestCreateAuction(t *testing.T) {
 
 		repo := &AuctionRepository{Collection: mt.Coll}
 
+		originalAuctionInterval := os.Getenv("AUCTION_INTERVAL")
 		os.Setenv("AUCTION_INTERVAL", "10ms")
-		defer os.Unsetenv("AUCTION_INTERVAL")
+		defer os.Setenv("AUCTION_INTERVAL", originalAuctionInterval)
 
 		ctx := context.Background()
 		auction := &auction_entity.Auction{
@@ -134,6 +137,50 @@ func TestCreateAuction(t *testing.T) {
 
 		time.Sleep(20 * time.Millisecond)
 	})
+
+	mt.Run("should handle context cancellation when APP_MODE is dev", func(mt *mtest.T) {
+		// Tests the `case <-requestCtx.Done()` path by canceling an external context.
+		// When APP_MODE=test, the function uses the request context, which can be canceled,
+		// allowing testing of the auction goroutine cancellation under controlled conditions.
+		// In other modes (dev/prod), the function uses context.Background(), because using
+		// the request context in production could almost always prevent the auction from completing,
+		// since a request lasts seconds but an auction may last hours, days, or months.
+		// This ensures the auction closure is independent of the request duration.
+		originalAppMode := os.Getenv("APP_MODE")
+		os.Setenv("APP_MODE", "test")
+		defer os.Setenv("APP_MODE", originalAppMode)
+
+		originalAuctionInterval := os.Getenv("AUCTION_INTERVAL")
+		os.Setenv("AUCTION_INTERVAL", "30ms")
+		defer os.Setenv("AUCTION_INTERVAL", originalAuctionInterval)
+
+		mt.AddMockResponses(mtest.CreateSuccessResponse())
+		repo := &AuctionRepository{Collection: mt.Coll}
+
+		// Create an external context that will be cancelled before the auction interval
+		ctx, cancel := context.WithCancel(context.Background())
+		defer cancel()
+
+		auction := &auction_entity.Auction{
+			Id:          "5",
+			ProductName: "Camera",
+			Category:    "Photography",
+			Description: "Digital camera",
+			Condition:   auction_entity.New,
+			Status:      auction_entity.Active,
+			Timestamp:   time.Now(),
+		}
+
+		err := repo.CreateAuction(ctx, auction)
+		assert.Nil(mt, err)
+
+		// Cancel the context before the auction interval expires
+		cancel()
+
+		// Wait enough time for the goroutine to process the cancellation
+		time.Sleep(50 * time.Millisecond)
+	})
+
 }
 
 func TestGetAuctionInterval(t *testing.T) {
