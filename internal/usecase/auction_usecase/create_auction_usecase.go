@@ -14,7 +14,7 @@ type AuctionInputDTO struct {
 	ProductName string           `json:"product_name" binding:"required,min=1"`
 	Category    string           `json:"category" binding:"required,min=2"`
 	Description string           `json:"description" binding:"required,min=10,max=200"`
-	Condition   ProductCondition `json:"condition" binding:"oneof=0 1 2"`
+	Condition   ProductCondition `json:"condition" binding:"oneof=1 2 3"`
 }
 
 type AuctionOutputDTO struct {
@@ -43,7 +43,7 @@ func NewAuctionUseCase(
 
 type AuctionUseCaseInterface interface {
 	CreateAuction(
-		ctx context.Context,
+		requestCtx context.Context,
 		auctionInput AuctionInputDTO) *internal_error.InternalError
 
 	FindAuctionById(
@@ -68,7 +68,7 @@ type AuctionUseCase struct {
 }
 
 func (au *AuctionUseCase) CreateAuction(
-	ctx context.Context,
+	requestCtx context.Context,
 	auctionInput AuctionInputDTO) *internal_error.InternalError {
 	auction, err := auction_entity.CreateAuction(
 		auctionInput.ProductName,
@@ -79,8 +79,7 @@ func (au *AuctionUseCase) CreateAuction(
 		return err
 	}
 
-	if err := au.auctionRepositoryInterface.CreateAuction(
-		ctx, auction); err != nil {
+	if err := au.auctionRepositoryInterface.CreateAuction(requestCtx, auction); err != nil {
 		return err
 	}
 

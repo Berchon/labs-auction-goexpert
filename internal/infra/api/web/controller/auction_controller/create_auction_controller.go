@@ -1,7 +1,6 @@
 package auction_controller
 
 import (
-	"context"
 	"net/http"
 
 	"github.com/Berchon/fullcycle-auction_go/configuration/rest_err"
@@ -30,7 +29,8 @@ func (u *AuctionController) CreateAuction(c *gin.Context) {
 		return
 	}
 
-	err := u.auctionUseCase.CreateAuction(context.Background(), auctionInputDTO)
+	requestCtx := c.Request.Context()
+	err := u.auctionUseCase.CreateAuction(requestCtx, auctionInputDTO)
 	if err != nil {
 		restErr := rest_err.ConvertError(err)
 

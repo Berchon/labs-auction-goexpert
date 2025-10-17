@@ -33,7 +33,7 @@ func NewAuctionRepository(database *mongo.Database) *AuctionRepository {
 }
 
 func (ar *AuctionRepository) CreateAuction(
-	ctx context.Context,
+	requestCtx context.Context,
 	auctionEntity *auction_entity.Auction) *internal_error.InternalError {
 	auctionEntityMongo := &AuctionEntityMongo{
 		Id:          auctionEntity.Id,
@@ -44,6 +44,12 @@ func (ar *AuctionRepository) CreateAuction(
 		Status:      auctionEntity.Status,
 		Timestamp:   auctionEntity.Timestamp.Unix(),
 	}
+
+	ctx := context.Background()
+	if os.Getenv("APP_MODE") != "test" || requestCtx == nil {
+		requestCtx = ctx
+	}
+
 	_, err := ar.Collection.InsertOne(ctx, auctionEntityMongo)
 	if err != nil {
 		logger.Error("Error trying to insert auction", err)
@@ -54,8 +60,8 @@ func (ar *AuctionRepository) CreateAuction(
 		select {
 		case <-time.After(getAuctioInterval()):
 			closeAuction(ctx, ar.Collection, auctionEntityMongo.Id)
-		case <-ctx.Done():
-			logger.Error("Error to close auction, context cancelled", ctx.Err())
+		case <-requestCtx.Done():
+			logger.Error("Error to close auction, context cancelled", requestCtx.Err())
 			return
 		}
 	}()
